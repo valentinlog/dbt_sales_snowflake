@@ -1,6 +1,6 @@
 SELECT
     id,
-    TO_YEAR(created_at) AS birth_year,
+    {{ date_trunc("year", "created_at") }} as order_year,
     user_id,
     product_id,
     quantity,
