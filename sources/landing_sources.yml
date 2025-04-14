@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: landing
+    database: dbt_sales_dev 
+    schema: landing  
+    tables:
+      - name: orders
+      - name: products
+      - name: reviews
+      - name: users
