@@ -3,7 +3,7 @@ SELECT
     created_at,
     city,
     state,
-     {{ date_trunc("year", "birth_date") }} as birth_year,
+    year(cast(birth_date as date)) as birth_year,
     source as sales_channel
 FROM
 {{ ref('bronze_users') }}
