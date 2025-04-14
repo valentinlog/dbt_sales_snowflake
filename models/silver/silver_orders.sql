@@ -1,6 +1,6 @@
 SELECT
     id,
-    date(date_format(created_at, 'yyyy-MM-dd')) as order_date,
+    date(created_at, 'yyyy-MM-dd') as order_date,
     user_id,
     product_id,
     quantity,
