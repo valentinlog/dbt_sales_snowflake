@@ -1,6 +1,6 @@
 SELECT
-    
-    TO_DATE(r.created_at)  as review_date,
+  
+    to_date(r.created_at)  review_date,
     r.product_id,
     p.product_name,
     avg(r.rating) as avg_rating

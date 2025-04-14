@@ -3,7 +3,7 @@ SELECT
     created_at,
     city,
     state,
-    TO_YEAR(birth_date) AS birth_year,
+    year(cast(birth_date as date)) as birth_year,
     source as sales_channel
 FROM
 {{ ref('bronze_users') }}
