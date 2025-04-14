@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: landing
-    database: dbt_sales_dev 
+    database: dbt_sales_dev
     schema: landing  
     tables:
       - name: orders
