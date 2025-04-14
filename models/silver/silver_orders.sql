@@ -1,6 +1,6 @@
 SELECT
     id,
-    date(date_format(created_at, 'yyyy-MM-dd')) as order_date,
+    TO_YEAR(created_at) AS birth_year,
     user_id,
     product_id,
     quantity,
