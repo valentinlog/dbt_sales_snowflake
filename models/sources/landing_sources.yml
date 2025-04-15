@@ -5,11 +5,4 @@ sources:
     database: SALES_DEV
     schema: landing  
     tables:
-      - name: customers
-      - name: employees
-      - name: orders
-      - name: productcategories
-      - name: products      
-      - name: productsubcategories
-      - name: vendorproduct
-      - name: vendors
+      - name: sales
