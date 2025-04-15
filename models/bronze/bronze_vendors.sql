@@ -1,4 +1,4 @@
 SELECT
 *
 FROM 
-{{ source('landing', 'vendord') }}
+{{ source('landing', 'vendors') }}
