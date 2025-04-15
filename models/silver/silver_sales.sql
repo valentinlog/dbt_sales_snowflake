@@ -1,4 +1,1 @@
-SELECT
-*
-FROM 
-{{ ref('bronze_sales') }}
+select * from {{ ref("bronze_sales") }}
