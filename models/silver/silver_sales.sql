@@ -1,18 +1,23 @@
-select 
-    SALES_ORDER_NUMBER,
-	SALES_ORDER_LINENUMBER,
-	ORDER_DATE,
-	CUSTOMER_NAME,
-	EMAIL,
-	ITEM,
-	QUANTITY,
-	UNITPRICE,
-	TAX,
-    case 
-        WHEN ORDER_DATE < '2019-08-01' THEN 
-          TRUE
-        ELSE 
-          FALSE        
-    end as IS_FLAGGED ,
-    {{ dbt_utils.current_timestamp()}} as CREATED_TS
+{{
+      config(
+
+                    materialized='incremental',
+                    unique_key = ['sales_order_number', 'order_date', 'customer_name','item']
+        
+            )
+
+}}
+select
+    sales_order_number,
+    sales_order_linenumber,
+    order_date,
+    customer_name,
+    email,
+    item,
+    quantity,
+    unitprice,
+    tax,
+    case when order_date < '2019-08-01' then true else false end as IS_FLAGGED,
+    current_timestamp() as created_ts,
+    current_timestamp() as modified_ts
 from {{ ref("bronze_sales") }}
