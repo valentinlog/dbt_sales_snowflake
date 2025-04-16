@@ -17,7 +17,6 @@ select
     quantity,
     unitprice,
     tax,
-    case when order_date < '2019-08-01' then true else false end as IS_FLAGGED,
-    current_timestamp() as created_ts,
-    current_timestamp() as modified_ts
+    case when order_date < '2019-08-01' then true else false end as is_flaged,
+    current_timestamp() as created_ts
 from {{ ref("bronze_sales") }}
