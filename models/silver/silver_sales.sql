@@ -18,5 +18,5 @@ select
     unitprice,
     tax,
     coalesce(order_date < '2019-08-01', false) as is_flaged,
-    current_timestamp() as created_ts
+    current_timestamp() as created_at
 from {{ ref("bronze_sales") }}
