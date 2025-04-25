@@ -5,7 +5,4 @@ sources:
     database: SALES_DEV
     schema: landing  
     tables:
-      - name: orders
-      - name: products
-      - name: reviews
-      - name: users
+      - name: sales
