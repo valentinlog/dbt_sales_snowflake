@@ -1,9 +1,22 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
-select
-  cast(customer_id as string) as customer_id,
-  initcap(trim(customer_name)) as customer_name,
-  email,
-  city,
-  country
-from {{ ref('bronze_customers') }}
+with source as (
+    select * from {{ ref('bronze_customers') }}
+),
+
+renamed as (
+    select
+        CUSTOMERID       as customer_id,
+        NAME             as name,
+        PHONE            as phone,
+        EMAIL            as email,
+        ADDRESS          as address,
+        REGION           as region,
+        POSTALZIP        as postal_zip,
+        COUNTRY          as country,
+        TIMESTAMP(CREATEDAT)  as created_at,
+        TIMESTAMP(UPDATEDAT)  as updated_at
+    from source
+)
+
+select * from renamed

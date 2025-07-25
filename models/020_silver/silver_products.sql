@@ -1,8 +1,18 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
-select
-  cast(product_id as string) as product_id,
-  initcap(trim(product_name)) as product_name,
-  cast(category as string) as category,
-  cast(price as float) as price
-from {{ ref('bronze_products') }}
+with source as (
+    select * from {{ ref('bronze_products') }}
+),
+
+renamed as (
+    select
+        PRODUCTID       as product_id,
+        NAME            as name,
+        CATEGORY        as category,
+        PRICE           as price,
+        TIMESTAMP(CREATEDAT)  as created_at,
+        TIMESTAMP(UPDATEDAT)  as updated_at
+    from source
+)
+
+select * from renamed

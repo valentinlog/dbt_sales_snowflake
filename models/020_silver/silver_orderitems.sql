@@ -1,9 +1,15 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
-select
-  cast(orderitem_id as string) as orderitem_id,
-  cast(order_id as string) as order_id,
-  cast(product_id as string) as product_id,
-  cast(quantity as int) as quantity,
-  cast(unit_price as float) as unit_price
-from {{ ref('bronze_orderitems') }}
+with source as (
+    select * from {{ ref('bronze_orderitems') }}
+),
+
+renamed as (
+    select
+        ORDERITEMSID   as orderitems_id,
+        ORDERID        as order_id,
+        PRODUCTID      as product_id
+    from source
+)
+
+select * from renamed
