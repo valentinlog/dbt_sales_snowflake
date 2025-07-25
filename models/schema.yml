@@ -1,0 +1,183 @@
+version: 2
+
+models:
+
+  # ------------------ BRONZE ------------------
+  - name: bronze_customers
+    description: "Raw seed data for customers loaded from raw_customers.csv"
+    columns:
+      - name: customer_id
+        description: "Unique identifier of the customer"
+        tests: [not_null]
+      - name: customer_name
+        description: "Name of the customer"
+      - name: email
+        description: "Email address"
+      - name: city
+        description: "Customer city"
+      - name: country
+        description: "Customer country"
+
+  - name: bronze_orders
+    description: "Raw seed data for orders loaded from raw_orders.csv"
+    columns:
+      - name: order_id
+        description: "Unique identifier of the order"
+        tests: [not_null]
+      - name: customer_id
+        description: "ID of the customer who placed the order"
+      - name: order_date
+        description: "Date when the order was placed"
+      - name: status
+        description: "Status of the order (e.g. Completed, Pending)"
+
+  - name: bronze_orderitems
+    description: "Raw seed data for order items loaded from raw_orderitems.csv"
+    columns:
+      - name: orderitem_id
+        description: "Unique identifier of the order item"
+        tests: [not_null]
+      - name: order_id
+        description: "ID of the order this item belongs to"
+      - name: product_id
+        description: "ID of the product ordered"
+      - name: quantity
+        description: "Quantity ordered"
+      - name: unit_price
+        description: "Price per unit of the product"
+
+  - name: bronze_products
+    description: "Raw seed data for products loaded from raw_products.csv"
+    columns:
+      - name: product_id
+        description: "Unique identifier of the product"
+        tests: [not_null]
+      - name: product_name
+        description: "Name of the product"
+      - name: category
+        description: "Product category"
+      - name: price
+        description: "Retail price of the product"
+
+  # ------------------ SILVER ------------------
+  - name: silver_customers
+    description: "Cleaned and standardized customer data"
+    columns:
+      - name: customer_id
+        description: "Customer ID as string"
+        tests: [not_null, unique]
+      - name: customer_name
+        description: "Proper-cased full customer name"
+      - name: email
+        description: "Email address of the customer"
+      - name: city
+        description: "City name"
+      - name: country
+        description: "Country name"
+
+  - name: silver_orders
+    description: "Cleaned and standardized order data"
+    columns:
+      - name: order_id
+        description: "Order ID"
+        tests: [not_null, unique]
+      - name: customer_id
+        description: "Foreign key to customer"
+        tests: [not_null]
+      - name: order_date
+        description: "Order placement date"
+      - name: status
+        description: "Status of the order"
+
+  - name: silver_orderitems
+    description: "Cleaned and standardized order item data"
+    columns:
+      - name: orderitem_id
+        description: "Order item ID"
+        tests: [not_null, unique]
+      - name: order_id
+        description: "FK to order"
+      - name: product_id
+        description: "FK to product"
+      - name: quantity
+        description: "Ordered quantity"
+      - name: unit_price
+        description: "Price per item"
+
+  - name: silver_products
+    description: "Cleaned and standardized product data"
+    columns:
+      - name: product_id
+        description: "Product ID"
+        tests: [not_null, unique]
+      - name: product_name
+        description: "Cleaned product name"
+      - name: category
+        description: "Product category"
+      - name: price
+        description: "Price as float"
+
+  # ------------------ GOLD ------------------
+  - name: dim_customers
+    description: "Customer dimension table used in analytics"
+    columns:
+      - name: customer_id
+        description: "Customer ID"
+        tests: [not_null, unique]
+      - name: customer_name
+        description: "Full customer name"
+      - name: email
+        description: "Customer email"
+      - name: city
+        description: "City"
+      - name: country
+        description: "Country"
+
+  - name: dim_products
+    description: "Product dimension table used in analytics"
+    columns:
+      - name: product_id
+        description: "Product ID"
+        tests: [not_null, unique]
+      - name: product_name
+        description: "Product name"
+      - name: category
+        description: "Product category"
+      - name: price
+        description: "Product price"
+
+  - name: fct_orders
+    description: "Fact table summarizing orders and total amount per order"
+    columns:
+      - name: order_id
+        description: "Order ID"
+        tests: [not_null, unique]
+      - name: order_date
+        description: "Date of the order"
+      - name: customer_id
+        description: "FK to customer"
+      - name: customer_name
+        description: "Customer name"
+      - name: total_amount
+        description: "Total order value"
+      - name: total_items
+        description: "Number of items in order"
+
+  - name: fct_orderitems
+    description: "Fact table at the item level for each order"
+    columns:
+      - name: orderitem_id
+        description: "Unique order item ID"
+        tests: [not_null, unique]
+      - name: order_id
+        description: "FK to order"
+      - name: product_id
+        description: "FK to product"
+      - name: product_name
+        description: "Product name"
+      - name: quantity
+        description: "Ordered quantity"
+      - name: unit_price
+        description: "Price per unit"
+      - name: line_total
+        description: "Calculated total for the line item"

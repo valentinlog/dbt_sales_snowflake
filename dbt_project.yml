@@ -1,19 +1,37 @@
-name: dbt_medallion
-version: 1.0.0
-
+name: 'dbt_medallion_snowflake'
+version: '1.0'
 config-version: 2
 
-profile: snowflake
+profile: 'dbt_medallion_snowflake'
 
 model-paths: ["models"]
 seed-paths: ["seeds"]
+analysis-paths: ["analysis"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
 
 models:
-  dbt_medallion:
+  dbt_medallion_snowflake:
+    +materialized: view
+
     010_bronze:
+      +schema: bronze
       +materialized: view
+
     020_silver:
-      +materialized: incremental
-      +unique_key: id
+      +schema: silver
+      +materialized: view
+
     030_gold:
+      +schema: gold
       +materialized: table
+
+seeds:
+  dbt_medallion_snowflake:
+    +schema: raw
+    +materialized: seed
