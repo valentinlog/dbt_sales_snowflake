@@ -3,7 +3,8 @@ version: '1.0'
 config-version: 2
 
 profile: 'dbt_medallion_snowflake'
-
+vars:
+  surrogate_key_treat_nulls_as_empty_strings: true
 model-paths: ["models"]
 seed-paths: ["seeds"]
 analysis-paths: ["analysis"]
