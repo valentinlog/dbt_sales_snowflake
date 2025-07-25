@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: bronze_customers
+    description: "Raw customer data loaded from seed"
+  - name: bronze_orders
+    description: "Raw order data loaded from seed"
+  - name: bronze_orderitems
+    description: "Raw order items data loaded from seed"
+  - name: bronze_products
+    description: "Raw product data loaded from seed"
+
+  - name: silver_customers
+    description: "Cleaned and conformed customers with timestamps"
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+  - name: silver_orders
+    description: "Cleaned orders with timestamps"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+  - name: silver_orderitems
+    description: "Cleaned order item mapping"
+    columns:
+      - name: orderitems_id
+        tests: [not_null, unique]
+  - name: silver_products
+    description: "Cleaned products with price and timestamps"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: gold_dim_customers
+    description: "SCD Type 2 customers dimension"
+    columns:
+      - name: customer_id
+        tests: [not_null]
+      - name: is_current
+        tests:
+          - accepted_values:
+              values: [true, false]
+
+  - name: gold_dim_products
+    description: "Dimensional products"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: gold_fct_orders
+    description: "Fact table of orders"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+
+  - name: gold_fct_orderitems
+    description: "Fact table of order line items"
+    columns:
+      - name: orderitems_id
+        tests: [not_null, unique]
