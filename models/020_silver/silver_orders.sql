@@ -8,9 +8,10 @@ renamed as (
     select
         ORDERID                  as order_id,
         CUSTOMERID               as customer_id,
-        STATUS                   as status,
-        TIMESTAMP(CREATEDAT)   as created_at,
-        TIMESTAMP(UPDATEDAT)   as updated_at
+        SALESPERSON              as sales_person,
+        ORDERSTATUS                   as status,
+        TO_TIMESTAMP(ORDERPLACEDTIMESTAMP)   as created_at,
+        TO_TIMESTAMP(UPDATEDAT)   as updated_at
     from source
 )
 

@@ -14,8 +14,8 @@ renamed as (
         REGION           as region,
         POSTALZIP        as postal_zip,
         COUNTRY          as country,
-        TIMESTAMP(CREATEDAT)  as created_at,
-        TIMESTAMP(UPDATEDAT)  as updated_at
+        TO_TIMESTAMP (CREATEDAT)  as created_at,
+        TO_TIMESTAMP (UPDATEDAT)  as updated_at
     from source
 )
 

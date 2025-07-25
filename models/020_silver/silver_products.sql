@@ -7,11 +7,11 @@ with source as (
 renamed as (
     select
         PRODUCTID       as product_id,
-        NAME            as name,
-        CATEGORY        as category,
+        PRODUCT            as name,
+        DEPARTMENT        as category,
         PRICE           as price,
-        TIMESTAMP(CREATEDAT)  as created_at,
-        TIMESTAMP(UPDATEDAT)  as updated_at
+        TO_TIMESTAMP(CREATEDAT)  as created_at,
+        TO_TIMESTAMP(UPDATEDAT)  as updated_at
     from source
 )
 
