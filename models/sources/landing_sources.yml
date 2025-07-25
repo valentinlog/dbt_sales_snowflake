@@ -1,8 +1,0 @@
-version: 2
-
-sources:
-  - name: landing
-    database: SALES_DEV
-    schema: landing  
-    tables:
-      - name: sales
