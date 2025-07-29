@@ -1,0 +1,107 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: raw_customers
+      - name: raw_orders
+      - name: raw_orderitems
+      - name: raw_products
+
+models:
+  # Bronze
+  - name: bronze_customers
+    description: "Bronze customers layer"
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null]
+  - name: bronze_orders
+    description: "Bronze orders layer"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests: [not_null]
+  - name: bronze_orderitems
+    description: "Bronze orderitems layer"
+    columns:
+      - name: order_items_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests: [not_null]
+      - name: product_id
+        tests: [not_null]
+  - name: bronze_products
+    description: "Bronze products layer"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+      - name: price
+        tests: [not_null]
+
+  # Silver
+  - name: silver_customers
+    description: "Silver customers layer"
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: email
+        tests: [not_null]
+  - name: silver_orders
+    description: "Silver orders layer"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_customers')
+              field: customer_id
+  - name: silver_orderitems
+    description: "Silver orderitems layer"
+    columns:
+      - name: order_items_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_orders')
+              field: order_id
+      - name: product_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('silver_products')
+              field: product_id
+  - name: silver_products
+    description: "Silver products layer"
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  # Gold
+  - name: dim_customers
+    description: "SCD2 dimension of customers"
+    columns:
+      - name: customer_id
+        tests: [not_null]
+      - name: is_current
+        tests: [not_null]
+  - name: fct_orders
+    description: "Fact table of orders"
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+      - name: total_amount
+        tests: [not_null]
