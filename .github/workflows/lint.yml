@@ -1,0 +1,45 @@
+name: Lint
+
+on:
+  pull_request:
+    branches:
+      - dev
+      - qa
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+jobs:
+  sqlfluff:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Get target branch
+        run: |
+          git fetch origin "${{ github.event.pull_request.base.ref }}"
+
+      - name: Run SQLFluff on PR changes
+        run: |
+          diff-quality \
+            --violations sqlfluff \
+            --compare-branch "origin/${{ github.event.pull_request.base.ref }}" \
+            --fail-under 90 \
+            --html-report report.html \
+            >> "$GITHUB_STEP_SUMMARY"

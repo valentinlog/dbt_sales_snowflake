@@ -1,0 +1,78 @@
+name: dbt Deploy
+
+on:
+  push:
+    branches:
+      - dev
+      - qa
+      - main
+
+env:
+  SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+  SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+  SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+  SNOWFLAKE_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+
+jobs:
+  deploy:
+    name: Deploy to ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dbt
+        run: |
+          python -m pip install --upgrade pip
+          pip install dbt-snowflake==1.12.0
+
+      - name: Check dbt version
+        run: |
+          dbt --version
+
+      - name: Set dbt target
+        id: target
+        shell: bash
+        run: |
+          case "${GITHUB_REF_NAME}" in
+            dev)
+              echo "target=dev" >> "$GITHUB_OUTPUT"
+              echo "Deploying to DEV - SALES_DEV"
+              ;;
+            qa)
+              echo "target=qa" >> "$GITHUB_OUTPUT"
+              echo "Deploying to QA - SALES_QA"
+              ;;
+            main)
+              echo "target=prod" >> "$GITHUB_OUTPUT"
+              echo "Deploying to PROD - SALES_PROD"
+              ;;
+            *)
+              echo "Unsupported branch: ${GITHUB_REF_NAME}"
+              exit 1
+              ;;
+          esac
+
+      - name: dbt debug
+        run: |
+          dbt debug \
+            --profiles-dir . \
+            --target ${{ steps.target.outputs.target }}
+
+      - name: dbt deps
+        run: |
+          dbt deps \
+            --profiles-dir . \
+            --target ${{ steps.target.outputs.target }}
+
+      - name: dbt build
+        run: |
+          dbt build \
+            --profiles-dir . \
+            --target ${{ steps.target.outputs.target }}
