@@ -35,4 +35,3 @@ models:
 seeds:
   dbt_medallion_snowflake:
     +schema: raw
-    +materialized: seed
