@@ -22,7 +22,7 @@ models:
 
     010_bronze:
       +schema: bronze
-      +materialized: table
+      +materialized: view
 
     020_silver:
       +schema: silver
