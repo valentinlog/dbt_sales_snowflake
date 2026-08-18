@@ -22,11 +22,11 @@ models:
 
     010_bronze:
       +schema: bronze
-      +materialized: view
+      +materialized: table
 
     020_silver:
       +schema: silver
-      +materialized: view
+      +materialized: table
 
     030_gold:
       +schema: gold
