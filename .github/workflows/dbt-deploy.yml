@@ -1,6 +1,8 @@
 name: dbt Deploy
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - dev
@@ -33,8 +35,7 @@ jobs:
           pip install dbt-snowflake==1.12.0
 
       - name: Check dbt version
-        run: |
-          dbt --version
+        run: dbt --version
 
       - name: Set dbt target
         id: target
@@ -43,15 +44,15 @@ jobs:
           case "${GITHUB_REF_NAME}" in
             dev)
               echo "target=dev" >> "$GITHUB_OUTPUT"
-              echo "Deploying to DEV - SALES_DEV"
+              echo "Deploying to DEV (SALES_DEV)"
               ;;
             qa)
               echo "target=qa" >> "$GITHUB_OUTPUT"
-              echo "Deploying to QA - SALES_QA"
+              echo "Deploying to QA (SALES_QA)"
               ;;
             main)
               echo "target=prod" >> "$GITHUB_OUTPUT"
-              echo "Deploying to PROD - SALES_PROD"
+              echo "Deploying to PROD (SALES_PROD)"
               ;;
             *)
               echo "Unsupported branch: ${GITHUB_REF_NAME}"
