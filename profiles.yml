@@ -11,7 +11,7 @@ dbt_medallion_snowflake:
       database: SALES_DEV
       warehouse: COMPUTE_WH
       schema: PUBLIC
-      threads: 4
+      threads: 7
 
     qa:
       type: snowflake
@@ -22,7 +22,7 @@ dbt_medallion_snowflake:
       database: SALES_QA
       warehouse: COMPUTE_WH
       schema: PUBLIC
-      threads: 4
+      threads: 7
 
     prod:
       type: snowflake
@@ -33,4 +33,4 @@ dbt_medallion_snowflake:
       database: SALES_PROD
       warehouse: COMPUTE_WH
       schema: PUBLIC
-      threads: 4
+      threads: 7
