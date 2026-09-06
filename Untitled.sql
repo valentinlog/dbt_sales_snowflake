@@ -1,0 +1,1 @@
+drop SALES_DEV.BRONZE 
