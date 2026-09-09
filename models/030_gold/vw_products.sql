@@ -2,8 +2,8 @@
 
 
 select
-    product_id,
-    product_name,
-    category,
-    price
+    PRODUCT_ID,
+    PRODUCT_NAME,
+    CATEGORY,
+    PRICE
 from {{ ref('dim_products') }}
